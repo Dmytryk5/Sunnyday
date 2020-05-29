@@ -43,7 +43,7 @@ class ForecastViewModel : ViewModel(){
 //        _conditions.value = ResponseData.Loading()
 //        _weather.value = ResponseData.Loading()
 
-        repository.addCity(city, lat, lon).subscribe {
+        repository.addCity(city, lat, lon).subscribe ({
             _weather.addSource(repository.getCurrentWeather(city)){
                 _weather.value = it
             }
@@ -55,7 +55,19 @@ class ForecastViewModel : ViewModel(){
             _forecast.addSource(repository.getForecast(city)){
                 _forecast.value = it
             }
-        }.addTo(compositeDisposable)
+        }, {
+            _weather.addSource(repository.getCurrentWeather(city)){
+                _weather.value = it
+            }
+
+            _conditions.addSource(repository.getCurrentWeatherConditions(city)){
+                _conditions.value = it
+            }
+
+            _forecast.addSource(repository.getForecast(city)){
+                _forecast.value = it
+            }
+        }).addTo(compositeDisposable)
 
 
     }

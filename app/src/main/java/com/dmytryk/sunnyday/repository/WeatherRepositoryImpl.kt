@@ -58,6 +58,7 @@ class WeatherRepositoryImpl : WeatherRepository {
                 }, {
                     logE("could not save city ${it.message}")
                     it.printStackTrace()
+                    emitter.onError(it)
                 })
 
             compositeDisposable.add(disposable)
@@ -199,6 +200,8 @@ class WeatherRepositoryImpl : WeatherRepository {
                                 emitter.onComplete()
                             },{error ->
                                 error.printStackTrace()
+                                emitter.onError(error)
+
                             })
 
                         compositeDisposable.add(nestedDisposable)

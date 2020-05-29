@@ -25,11 +25,15 @@ class CityViewModel : ViewModel(){
     fun getCities(){
 
         if (_cities.value == null)
-            repository.updateCities().observeOn(AndroidSchedulers.mainThread()).subscribe {
+            repository.updateCities().observeOn(AndroidSchedulers.mainThread()).subscribe({
                 _cities.addSource(repository.getCities()){
                     _cities.value = it
                 }
-            }.addTo(compositeDisposable)
+            }, {
+                _cities.addSource(repository.getCities()){
+                    _cities.value = it
+                }
+            }).addTo(compositeDisposable)
 
 
     }
